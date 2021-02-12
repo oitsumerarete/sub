@@ -1,107 +1,97 @@
 #include <iostream>
 using namespace std;
 
-struct subvector {
-	int* mas;
-	unsigned int top;
-	unsigned int capacity;
-};
-
-
-bool init(subvector* qv) {
-
-	qv->mas = NULL;
-	qv->top = 0;
-	qv->capacity = 0;
-	return true;
-};
-
-
-bool push_back(subvector* qv, int d) {
-
-	if (qv->top + 1 > qv->capacity) {
-		int* p = new int[qv->capacity + 1];
-		for (int i = 0; i < qv->capacity; i++) {
-			*(p + i) = *(qv->mas + i);
-		}
-		if (qv->capacity > 0) delete[] qv->mas;
-		qv->capacity++;
-		qv->mas = p;
-		*(qv->mas + qv->top) = d;
-		qv->top++;
+class subvector {
+private:
+int* mas;
+unsigned int top;
+unsigned int capacity;
+	
+public:
+	subvector() {
+        this-> mas = NULL;
+        this->top = 0;
+        this->capacity = 0;
+   	}
+	
+	
+bool push_back(int d) {
+if (this ->top + 1 > this ->capacity) {
+	int* p = new int[this ->capacity + 1];
+	for (int i = 0; i < this ->capacity; i++) {
+		*(p + i) = *(this -> mas + i);
+	    }
+	
+	if (this ->capacity > 0) delete[] this ->mas;
+	this ->capacity++;
+	this ->mas = p;
+	*(this ->mas + this ->top) = d;
+	this ->top++;
 	}
+else {
+    *(this ->mas + this ->top) = d;
+    this ->top++;
+}
+return true;
+}
+	
+	
+bool pop_back() {
+	if (this ->top > 0) {
+            this ->top--;
+            int s = *(this ->mas + this ->top);
+            return s;
+        }
+        else {
+            return 0;
+        }
+}
+
+	
+bool resize(unsigned int new_capacity) {
+        if (new_capacity > 0) {
+            int* p = new int[new_capacity];
+            for (int i = 0; i < this ->top; i++) {
+                *(p + i) = *(this ->mas + i);
+            }
+            if (this ->capacity > 0) delete[] this ->mas;
+            this ->capacity = new_capacity;
+            this ->mas = p;
+            if (new_capacity < this ->top) this ->top = new_capacity;
+            return true;
+        }
+        else {
+            if (this ->capacity > 0) delete[] this ->mas;
+            this -> mas = NULL;
+            this ->top = 0;
+            this ->capacity = 0;
+            return true;
+        }
+}	   
+	
+	
+void shrink_to_fit() {
+	if (this ->capacity > this ->top) {
+            if (this ->top > 0) {
+                int* p = new int[this ->top];
+                for (int i = 0; i < this ->top; i++) {
+                    *(p + i) = *(this ->mas + i);
+                }
+                delete[] this ->mas;
+                this ->capacity = this ->top;
+                this ->mas = p;
+            }
 	else {
-		*(qv->mas + qv->top) = d;
-		qv->top++;
-	}
-	return true;
+        	delete[] this ->mas;
+                this -> mas = NULL;
+                this ->top = 0;
+                this ->capacity = 0;
+            }
+        }
 }
-
-
-int pop_back(subvector* qv) {
-
-	if (qv->top > 0) {
-		qv->top--;
-		int e = *(qv->mas + qv->top);
-		return e;
-	}
-	else {
-		return 0;
-	}
+	
+	
+void clear() {
+        this ->top = 0;
 }
-
-
-bool resize(subvector* qv, unsigned int new_capacity) {
-
-	if (new_capacity > 0) {
-		int* p = new int[new_capacity];
-		for (int i = 0; i < qv->top; i++) {
-			*(p + i) = *(qv->mas + i);
-		}
-		if (qv->capacity > 0) delete[] qv->mas;
-		qv->capacity = new_capacity;
-		qv->mas = p;
-		if (new_capacity < qv->top) qv->top = new_capacity;
-		return true;
-	}
-	else
-	{
-		if (qv->capacity > 0) delete[] qv->mas;
-		init(qv);
-		return true;
-	}
-}
-
-void shrink_to_fit(subvector* qv) {
-
-	if (qv->capacity > qv->top) {
-		if (qv->top > 0) {
-			int* p = new int[qv->top];
-			for (int i = 0; i < qv->top; i++) {
-				*(p + i) = *(qv->mas + i);
-			}
-			delete[] qv->mas;
-			qv->capacity = qv->top;
-			qv->mas = p;
-		}
-		else {
-			delete[] qv->mas;
-			init(qv);
-		}
-	}
-}
-
-
-void clear(subvector* qv) {
-
-	qv->top = 0;
-}
-
-
-void destructor(subvector* qv) {
-
-	delete[] qv->mas;
-	init(qv);
-}
-
-
+};
